@@ -42,6 +42,12 @@ let package = Package(
             name: "AccessibilitySnapshot",
             dependencies: ["AccessibilitySnapshotCore", "SnapshotTesting"],
             path: "Sources/AccessibilitySnapshot/SnapshotTesting"
+        ),
+        .testTarget(
+            name: "CoreTests",
+            dependencies: ["AccessibilitySnapshotCore",
+                           "SnapshotTesting"],
+            path: "Sources/AccessibilitySnapshot/Core/Tests/Swift"
         )
     ]
 )

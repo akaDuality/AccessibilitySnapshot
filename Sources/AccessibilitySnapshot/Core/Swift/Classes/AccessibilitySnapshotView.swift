@@ -416,7 +416,18 @@ public final class AccessibilitySnapshotView: UIView {
         static let legendVerticalSpacing: CGFloat = 16
 
     }
+}
 
+enum Strings {
+    
+    static func actionsAvailableText(for locale: String?) -> String {
+        return "Actions Available".localized(
+            key: "custom_actions.description",
+            comment: "Description for an accessibility element indicating that it has custom actions available",
+            locale: locale
+        )
+    }
+    
 }
 
 // MARK: -
@@ -600,19 +611,6 @@ private extension AccessibilitySnapshotView {
             static let hintLabelFont = UIFont.italicSystemFont(ofSize: 12)
 
         }
-
-        private enum Strings {
-
-            static func actionsAvailableText(for locale: String?) -> String {
-                return "Actions Available".localized(
-                    key: "custom_actions.description",
-                    comment: "Description for an accessibility element indicating that it has custom actions available",
-                    locale: locale
-                )
-            }
-
-        }
-
     }
 
     // MARK: -
