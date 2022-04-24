@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  AccessibilitySnapshotDescription.swift
 //  
 //
 //  Created by Mikhail Rubanov on 23.04.2022.
@@ -14,19 +14,15 @@ private let rect = CGRect(origin: .zero, size: CGSize(width: 300, height: 100))
 
 class DescriptionTests: XCTestCase {
     
-    var view: UIView!
-
-    override func setUp() {
-        super.setUp()
-        
-        view = UIView(frame: rect)
-        view.isAccessibilityElement = true
-    }
-    
     func test_customAction() {
+        let parent = UIView(frame: rect)
+        
+        let view = UIView(frame: rect)
+        view.isAccessibilityElement = true
+        
         view.accessibilityLabel = "Pizza"
         view.accessibilityValue = "Pepperoni"
-        view.accessibilityTraits = .button
+        view.accessibilityTraits = .header
         
         if #available(iOS 13.0, *) {
             view.accessibilityCustomActions = [
@@ -35,37 +31,49 @@ class DescriptionTests: XCTestCase {
             ]
         }
         
-        let sut = AccessibilitySnapshotDescription(containedView: view)
+        let button = UIButton(frame: rect)
+        button.isAccessibilityElement = true
+        button.accessibilityLabel = "Purchase"
+        button.accessibilityTraits = .button
+        
+        parent.addSubview(view)
+        parent.addSubview(button)
+        
+        let sut = AccessibilitySnapshotDescription(containedView: parent)
         let result = sut.parseAccessibility()
         
         XCTAssertEqual(result, """
-Pizza: Pepperoni. Button.
-
+Pizza: Pepperoni. Heading.
 ↓ Actions Available
 - Add to favorites
 - Share to friend
+
+Purchase. Button.
 """)
     }
 }
 
-class AccessibilityMarkerTextDescription: XCTestCase {
-    func test() {
-        let marker = AccessibilityMarker(
-            description: "Pizza: Pepperoni. Button.",
-            hint: "Tap twice to purchase",
-            shape: .frame(rect),
-            activationPoint: .zero,
-            usesDefaultActivationPoint: true,
-            customActions: ["Add to favorites",
-                           "Share to friend"])
-        
-        XCTAssertEqual(marker.textDescription, """
-Pizza: Pepperoni. Button.
-Tap twice to purchase
+// """
+// Close. Button.
+//
+// Cart. Button
+//
+// Description:
+// | Pepperoni. Heading.
+// |
+// | Contains: ...
+// |
+// | Size: medium, 2 of 3. Adjustable.
+// |
+// | Dough: traditional, 1 of 2. Button.
+// |____
+//
+// Add to product:
+// | Cheese: 20 rubles, 1 of 7. Button.
+// | Cucumber: 30 rubles, 2 of 7. Button.
+// | ...
+// |____
+//
+// Add to cart for 839 rubles. Button.
+// """
 
-↓ Actions Available
-- Add to favorites
-- Share to friend
-""")
-    }
-}

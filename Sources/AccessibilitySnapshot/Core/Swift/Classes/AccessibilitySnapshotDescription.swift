@@ -114,7 +114,7 @@ public final class AccessibilitySnapshotDescription: UIView {
         
         return markers
             .map { marker in marker.textDescription }
-            .joined(separator: "\n")
+            .joinedAsLinesWithSpace()
     }
 
     // MARK: - Public Static Properties
@@ -134,7 +134,6 @@ extension AccessibilityMarker {
         }
         
         if !customActions.isEmpty {
-            components.append("") // Separate by empty line
             components.append(
                 customActionDescription()
             )
@@ -156,5 +155,9 @@ extension AccessibilityMarker {
 extension Array where Element == String {
     func joinedAsLines() -> String {
         joined(separator: "\n")
+    }
+
+    func joinedAsLinesWithSpace() -> String {
+        joined(separator: "\n\n")
     }
 }
